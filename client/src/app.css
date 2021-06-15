@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: url("./Assets/Perros2.jpeg") fixed no-repeat;
+  background-size: cover;
+}
