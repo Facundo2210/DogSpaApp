@@ -6,7 +6,6 @@ import DogDetail from './Components/Containers/DogDetail/DogDetail';
 import Dogs from './Components/Containers/Dogs/Dogs';
 import LandingPage from './Components/Dumbs/LandingPage/LandingPage';
 import './app.css';
-import About from './Components/Dumbs/About/About';
 
 const App = () => {
 	return (
@@ -17,7 +16,6 @@ const App = () => {
 			</Switch>
 			<Route exact path='/dogs' component={Dogs}></Route>
 			<Route exact path='/add' component={AddDog}></Route>
-			<Route exact path='/about' component={About}></Route>
 			<Route
 				exact
 				path='/dogs/:id'
