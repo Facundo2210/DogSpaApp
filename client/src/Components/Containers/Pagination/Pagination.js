@@ -1,72 +1,45 @@
-import React, {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {useSelector} from 'react-redux';
+import CntCard from '../Cards/CntCards';
 import {DivBtnPaged} from '../Dogs/Styled';
-import {getAllDogs, updateAllDogs} from '../../../Redux/actions';
+import DogsDiv from './Styled';
 
-import CardDog from '../../Dumbs/CardDog/CardDog';
-
-const Pagination = () => {
-	const dispatch = useDispatch();
+const Pagination = ({setCurrentPage, currentPage}) => {
 	const filterDogTemp = useSelector((state) => state.filterDogTemp);
-
-	const [currentPage, setCurrentPage] = useState(1);
-
-	const DOG_PER_PAGE = 8;
+	const DOG_PER_PAGE = 12;
 	const indexOfLastPost = currentPage * DOG_PER_PAGE;
 	const indexOfFirstPost = indexOfLastPost - DOG_PER_PAGE;
 	const currentDogs = filterDogTemp.slice(indexOfFirstPost, indexOfLastPost);
+
 	let pagination = Math.ceil(filterDogTemp.length / DOG_PER_PAGE);
 	let arrayPaged = Array.from({length: pagination}, (__, i) => i + 1);
-	const handleOnClick = () => {
-		dispatch(updateAllDogs([]));
-		dispatch(getAllDogs());
-	};
-	const handlePrevClick = () => {
-		setCurrentPage((old) => old - 1);
-	};
 
-	const handleBtnClick = ({target}) => {
-		const {value} = target;
-		setCurrentPage(parseInt(value));
-	};
-
-	const handleNextClick = () => {
+	const handlePrevNextClick = ({target: {name}}) => {
+		if (name === 'prev') return setCurrentPage((old) => old - 1);
 		setCurrentPage((old) => old + 1);
 	};
+
 	return (
-		<>
-			<div className='cnt__dogs'>
-				{currentDogs &&
-					currentDogs.map(({name, id, temperament, image, weight}) => (
-						<CardDog
-							handleOnClick={handleOnClick}
-							key={name}
-							id={id}
-							name={name}
-							temperament={temperament}
-							image={image}
-							weight={weight}
-						/>
-					))}
-			</div>
-			<div>
-				<h2 className='page__h2'>Page {currentPage}</h2>
-			</div>
+		<DogsDiv cant={currentDogs.length}>
+			<CntCard currentDogs={currentDogs} />
 			<DivBtnPaged>
 				{currentPage > 1 ? (
-					<button onClick={handlePrevClick}>{'<<<'}</button>
+					<button onClick={handlePrevNextClick} name='prev'>
+						{'<<<'}
+					</button>
 				) : null}
-				{arrayPaged &&
-					arrayPaged.map((e) => (
-						<button onClick={handleBtnClick} value={e} key={e}>
-							{e}
-						</button>
-					))}
+				<div>
+					<h2 className='page__h2'>
+						Page {currentPage} / {arrayPaged.length}
+					</h2>
+				</div>
 				{pagination !== currentPage ? (
-					<button onClick={handleNextClick}>{'>>>'}</button>
+					<button onClick={handlePrevNextClick} name='next'>
+						{'>>>'}
+					</button>
 				) : null}
 			</DivBtnPaged>
-		</>
+		</DogsDiv>
 	);
 };
 
